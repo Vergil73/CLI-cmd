@@ -1,0 +1,24 @@
+* {
+    background-color: white;
+}
+
+h1 {
+    color: green;
+    text-emphasis-color: yellow;
+}
+
+#head {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#terminal-input {
+    color: black;
+    display: inline-block;
+    border: none;
+    outline: none;
+    resize: none;
+    vertical-align: middle;
+    width: 750px; /* Adjust as needed */
+    height: 1.5em;
+}
