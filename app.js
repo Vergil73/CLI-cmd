@@ -15,9 +15,13 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res) => {
-    res.render("terminal.ejs");
-}) 
+// CLI homepage
+const terminalRouter = require("./routes/terminalRouter");
+app.use("/", terminalRouter);
+
+// api
+const userRouter = require("./routes/usersRouter");
+app.use("/", userRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
