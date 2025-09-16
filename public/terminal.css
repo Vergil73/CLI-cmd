@@ -19,6 +19,14 @@ h1 {
     outline: none;
     resize: none;
     vertical-align: middle;
-    width: 750px; /* Adjust as needed */
+    width: 150px; /* Adjust as needed... input field length */ 
     height: 1.5em;
 }
+
+/* #passwd-input {
+    display: inline-block;
+    border: none;
+    outline: none;
+    resize: none;
+
+} */
