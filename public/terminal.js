@@ -8,22 +8,28 @@ const terminalOutput = document.querySelector(".terminal-output");
 let waitingForPassword = false;
 let currentUsername = null;
 
+function getPrompt(){
+    // return "terminal@local ~ $ "
+    return currentUsername === null ? "terminal@local ~ $ "
+    : `${currentUsername}@local ~ $ `;  
+}
+
+// For head of terminal like usr@local$- 
+function headTerminal(){
+    head.textContent = getPrompt();
+}
+headTerminal();
+
+
+// Actual commands
 function clear(){
     terminalOutput.innerHTML = "";
 }
 
 function createDate(){
-    const date = new Date();
     let paragraph = document.createElement('p');
     paragraph.textContent = new Date();
     terminalOutput.append(paragraph);
-}
-
-function newPassword(terminalValue){
-    console.log("newPassword function");
-    headTerminal();
-    head.textContent = `password for ${currentUsername}: `;
-    const inputPasswd = terminalValue;
 }
 
 function newUser(args){
@@ -32,12 +38,24 @@ function newUser(args){
         paragraph.textContent = "invalid username";
         terminalOutput.append(paragraph);
         console.log("invalid username");
-    } else{
+    } 
+    else {
+        currentUsername = args[0];
+        head.textContent = `password for ${currentUsername}: `;
+        console.log("Username: ", currentUsername);
         waitingForPassword = true;
-        // currentUsername = args[0];
-    }      
+    }       
 }
 
+function newPassword(passwd){
+    passwd;
+    const paragraph = document.createElement("p");
+    paragraph.textContent = "User created";
+    terminalOutput.append(paragraph);
+    headTerminal();
+}
+
+// List of commands
 const commands = {
     whoami: "I am Vergil.",
     ls: "currently empty",
@@ -48,20 +66,8 @@ const commands = {
     useradd : newUser
 };
 
-function getPrompt(){
-    return "terminal@local ~ $ "
-    // return currentUsername === null ? "terminal@local ~ $ "
-    // : `${currentUsername}@local ~ $ `;  
-}
-
-// For head of terminal like usr@local$- 
-function headTerminal(){
-    head.textContent = getPrompt();
-}
-headTerminal();
-
+// Takes the argument from the user with the commands/key and values
 function commandProcess(cmd){
-    // Takes the argument from the user with the commands/key and values
     const parts = cmd.split(" ");
     const command = parts[0]; 
     const args = parts.slice(1); 
@@ -82,31 +88,27 @@ function commandProcess(cmd){
             console.log("command not found");
             terminalOutput.append(error);
         }
-
 }
+
 
 terminalInput.addEventListener("keydown", function(e) {
     if(e.key === "Enter" && !e.shiftKey){
 
-        const terminalValue = terminalInput.value;
-        terminalInput.value = "";
-
-        headTerminal();
-        const inputHead = document.createElement("p");
-        inputHead.className = "input";
-        inputHead.textContent = head.textContent + terminalValue;
-        
-        terminalOutput.append(inputHead);
-    
+        terminalValue = terminalInput.value;
+        terminalInput.value = ""; 
+     
         if(waitingForPassword){
             newPassword(terminalValue);
-            // console.log("waiting for password: ",waitingForPassword);
             waitingForPassword = false;
-            } else {
+            console.log("USer", waitingForPassword);
+        } else {
+            headTerminal();
+            const inputHead = document.createElement("p");
+            inputHead.className = "input";
+            inputHead.textContent = head.textContent + terminalValue;
+            terminalOutput.append(inputHead);
             commandProcess(terminalValue);
-            console.log("Normal commands");
-         }
-
-
+            console.log("Normal Commands");
+        }
     } 
 })
