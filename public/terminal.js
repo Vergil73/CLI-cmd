@@ -61,7 +61,7 @@ const commands = {
     ls: "currently empty",
     touch: " creates new file",
     date: createDate,
-    help: " List of commands available: whoami, ls, touch, date ",
+    help: " List of commands available: whoami, ls, touch, date, useradd",
     clear: clear,
     useradd : newUser
 };
