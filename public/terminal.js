@@ -15,18 +15,15 @@ function clear(){
 function createDate(){
     const date = new Date();
     let paragraph = document.createElement('p');
-    paragraph.textContent = new Date()
+    paragraph.textContent = new Date();
     terminalOutput.append(paragraph);
 }
 
-function newPassword(){
-    const terminalValue = terminalInput.value;
-    terminalInput.value = "";
-
-    const passwdHead = document.createElement("p");
-    passwdHead.className = "input";
-    passwdHead.textContent = `password for ${currentUsername}: ` + terminalValue;
-    terminalOutput.append(passwdHead);    
+function newPassword(terminalValue){
+    console.log("newPassword function");
+    headTerminal();
+    head.textContent = `password for ${currentUsername}: `;
+    const inputPasswd = terminalValue;
 }
 
 function newUser(args){
@@ -37,10 +34,8 @@ function newUser(args){
         console.log("invalid username");
     } else{
         waitingForPassword = true;
-        currentUsername = args[0];
-      // console.log(`new user: ${username}`);
-    }  
-       
+        // currentUsername = args[0];
+    }      
 }
 
 const commands = {
@@ -53,9 +48,17 @@ const commands = {
     useradd : newUser
 };
 
+function getPrompt(){
+    return "terminal@local ~ $ "
+    // return currentUsername === null ? "terminal@local ~ $ "
+    // : `${currentUsername}@local ~ $ `;  
+}
+
 // For head of terminal like usr@local$- 
-const head = document.querySelector("#head");
-head.textContent = `usr@local ~ $ `;
+function headTerminal(){
+    head.textContent = getPrompt();
+}
+headTerminal();
 
 function commandProcess(cmd){
     // Takes the argument from the user with the commands/key and values
@@ -84,22 +87,26 @@ function commandProcess(cmd){
 
 terminalInput.addEventListener("keydown", function(e) {
     if(e.key === "Enter" && !e.shiftKey){
+
         const terminalValue = terminalInput.value;
         terminalInput.value = "";
 
+        headTerminal();
         const inputHead = document.createElement("p");
         inputHead.className = "input";
         inputHead.textContent = head.textContent + terminalValue;
+        
         terminalOutput.append(inputHead);
-
+    
         if(waitingForPassword){
-            newPassword();
-            console.log("waiting for password: ",waitingForPassword);
+            newPassword(terminalValue);
+            // console.log("waiting for password: ",waitingForPassword);
             waitingForPassword = false;
-        } else {
-        commandProcess(terminalValue);
+            } else {
+            commandProcess(terminalValue);
             console.log("Normal commands");
-        }
+         }
+
 
     } 
 })
